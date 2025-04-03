@@ -7,7 +7,7 @@ const schedule = document.querySelector("#schedule")
 
 // creating a render function 
 const render = () =>{
-      const html = events.map((planned) =>
+      const parties = events.map((planned) =>
       {
           return `
             <div>
@@ -19,12 +19,13 @@ const render = () =>{
             </div>
           `
       })
-      eventList.innerHTML = html.join("")
+      eventList.innerHTML = parties.join("")
 }
 
 //linking api to the Js File 
 const getEvent = async () => 
     {
+      try {
         const response = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-ftb-web-am/events")
         //console.log(plan)
         const json = await response.json()
@@ -32,6 +33,9 @@ const getEvent = async () =>
         events = json.data;
         console.log(events)
         render()
+      } catch (error) {
+        console.error(error)
+      }
     }
 getEvent()
 
@@ -42,7 +46,7 @@ schedule.addEventListener("submit", async (planner) =>
     {
       name: planner.target.name.value,
       description: planner.target.description.value,
-      date:planner.target.date.value,
+      date: new Date(planner.target.date.value),
       location:planner.target.location.value 
     }
     console.log(newEvent)
@@ -50,8 +54,8 @@ schedule.addEventListener("submit", async (planner) =>
   {
     const response = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-ftb-web-am/events",
     {
-      method: "POST",
-      headers: {
+      method:"POST",
+      headers:{
         'Content-type': 'application/json'
       },
       body: JSON.stringify(newEvent)
