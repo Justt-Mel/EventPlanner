@@ -7,7 +7,7 @@ const schedule = document.querySelector("#schedule")
 
 // creating a render function 
 const render = () =>{
-      const added = events.map((planned) =>
+      const html = events.map((planned) =>
       {
           return `
             <div>
@@ -19,7 +19,7 @@ const render = () =>{
             </div>
           `
       })
-      eventList.innerHTML = added.join("")
+      eventList.innerHTML = html.join("")
 }
 
 //linking api to the Js File 
@@ -45,10 +45,11 @@ schedule.addEventListener("submit", async (planner) =>
       date:planner.target.date.value,
       location:planner.target.location.value 
     }
+    console.log(newEvent)
   try
   {
     const response = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/COHORT_CODE/events",
-{
+    {
       method: "POST",
       headers: {
         'Content-type': 'application/json'
