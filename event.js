@@ -25,9 +25,9 @@ const render = () =>{
 //linking api to the Js File 
 const getEvent = async () => 
     {
-        const plan = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/COHORT_CODE/events")
+        const response = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-ftb-web-am/events")
         //console.log(plan)
-        const json = await plan.json()
+        const json = await response.json()
         //console.log(json.data)
         events = json.data;
         console.log(events)
@@ -40,15 +40,15 @@ schedule.addEventListener("submit", async (planner) =>
     planner.preventDefault();
     const newEvent =
     {
-      name:planner.target.name.value,
-      description:planner.target.description.value,
+      name: planner.target.name.value,
+      description: planner.target.description.value,
       date:planner.target.date.value,
       location:planner.target.location.value 
     }
     console.log(newEvent)
   try
   {
-    const response = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/COHORT_CODE/events",
+    const response = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-ftb-web-am/events",
     {
       method: "POST",
       headers: {
@@ -74,7 +74,7 @@ eventList.addEventListener("click", async (event) =>
       const eventId = event.target.name;
      try 
      {
-       await fetch(`https://fsa-crud-2aa9294fe819.herokuapp.com/api/COHORT_CODE/events/${eventId}`, {
+       await fetch(`https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-ftb-web-am/events/${eventId}`, {
          method: "DELETE"
        });
        event.target.parentElement.remove()
