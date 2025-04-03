@@ -1,0 +1,17 @@
+#event
+{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+#event> div
+{
+    border: solid cadetblue;
+    margin: 1rem;
+    padding: 1rem;
+}
+
+form{
+    border: solid indianred;
+}

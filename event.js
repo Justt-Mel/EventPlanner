@@ -1,35 +1,84 @@
 //creating the state to hold the events data 
-const events = [];
+let events = []
 
 //creating link to the div in the html file
-const eventList = document.querySelector("#event");
+const eventList = document.querySelector("#event")
+const schedule = document.querySelector("#schedule")
+
+// creating a render function 
+const render = () =>{
+      const added = events.map((planned) =>
+      {
+          return `
+            <div>
+              <h2>${planned.name}</h2>
+              <p>${planned.description}</p>
+              <p>${planned.date}</p>
+              <p>${planned.location}</p>
+              <button class="deleteButton" name="${planned.id}">Delete</button>
+            </div>
+          `
+      })
+      eventList.innerHTML = added.join("")
+}
 
 //linking api to the Js File 
 const getEvent = async () => 
     {
-        const plan = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-ftb-et-web-am/events")
+        const plan = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/COHORT_CODE/events")
         //console.log(plan)
         const json = await plan.json()
-       // console.log(json.data)
-        events= json.data;
+        //console.log(json.data)
+        events = json.data;
+        console.log(events)
         render()
     }
+getEvent()
 
-// creatin g a render function 
-const render = () => 
+schedule.addEventListener("submit", async (planner) =>
 {
-    const added = events.map((planner) =>
+    planner.preventDefault();
+    const newEvent =
     {
-        return `
-          <div>
-            <h2>${planner.name}</h2>
-            <p>${planner.description}
-            </p>
-          </div>
-        `
+      name:planner.target.name.value,
+      description:planner.target.description.value,
+      date:planner.target.date.value,
+      location:planner.target.location.value 
+    }
+  try
+  {
+    const response = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/COHORT_CODE/events",
+{
+      method: "POST",
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(newEvent)
     })
-    eventList.innerHTML = added.join("")
-}
+    const eventData = await response.json()
+    console.log(eventData)
+    events.push(eventData.data)
+    render()
+  }
+  catch(error)
+  {
+    console.error(error);
+  }
+})
 
-//creating a function to display the events in the html file
-getEvent();
+eventList.addEventListener("click", async (event) => 
+  {
+    if (event.target.classList.contains("deleteButton"))
+    {
+      const eventId = event.target.name;
+     try 
+     {
+       await fetch(`https://fsa-crud-2aa9294fe819.herokuapp.com/api/COHORT_CODE/events/${eventId}`, {
+         method: "DELETE"
+       });
+       event.target.parentElement.remove()
+     } catch (error) {
+      console.error(error)
+     }
+    }
+  })
